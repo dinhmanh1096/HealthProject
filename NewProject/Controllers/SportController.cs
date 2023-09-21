@@ -6,7 +6,7 @@ using NewProject.Reponsitories;
 
 namespace NewProject.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    
     [Route("api/[controller]")]
     [ApiController]
     public class SportController : ControllerBase
@@ -18,18 +18,22 @@ namespace NewProject.Controllers
             _sportRepo = repo;
         }
 
+        [Authorize(Roles = "Admin,User")]
         [HttpGet]
         public async Task<IActionResult> GetAllSport()
         {
             return Ok(await _sportRepo.GetAllSportsAsync());
 
         }
+
         [HttpGet("{sportId}")]
         public async Task<IActionResult> GetSportByID(int sportId)
         {
             var sport = await _sportRepo.GetSportsAsync(sportId);
             return sport == null ? NotFound() : Ok(sport);
         }
+
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> AddNewSport([FromBody] RequestSportModel model)
         {
@@ -39,6 +43,7 @@ namespace NewProject.Controllers
             return sport == null ? BadRequest() : Ok(sport);
 
         }
+        [Authorize(Roles = "Admin")]
         [HttpPut("{sportId}")]
         public async Task<IActionResult> UpdateSport(int sportId, [FromBody] SportModel model)
         {
@@ -49,6 +54,8 @@ namespace NewProject.Controllers
             await _sportRepo.UpdateSportAsync(sportId, model);
             return Ok();
         }
+
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{sportId}")]
         public async Task<IActionResult> DeleteSport([FromRoute] int sportId)
         {

@@ -5,8 +5,7 @@ using NewProject.Models;
 using NewProject.Reponsitories;
 
 namespace NewProject.Controllers
-{
-    [Authorize(Roles = "Admin")]
+{   
     [Route("api/[controller]")]
     [ApiController]
 
@@ -18,24 +17,25 @@ namespace NewProject.Controllers
         {
             _roleRepo = repo;
         }
+
+        [Authorize(Roles = "Admin,User")]
         [HttpGet]
         public async Task<IActionResult> GetAllRole()
         {
-            try
-            {
+          
                 return Ok(await _roleRepo.GetAllRoleAsync());
-            }
-            catch
-            {
-                return BadRequest();
-            }
+
         }
+
+        [Authorize(Roles = "Admin,User")]      
         [HttpGet("{roleId}")]
         public async Task<IActionResult> GetRoleByID(int roleId)
         {
             var role = await _roleRepo.GetRoleAsync(roleId);
             return role == null ? NotFound() : Ok(role);
         }
+
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> AddNewRole(RequestRoleModel model)
         {
@@ -44,6 +44,8 @@ namespace NewProject.Controllers
             return role == null ? BadRequest() : Ok(role);
 
         }
+
+        [Authorize(Roles = "Admin")]
         [HttpPut("{roleId}")]
         public async Task<IActionResult> UpdateSport(int roleId, [FromBody] RoleModel model)
         {
@@ -54,6 +56,8 @@ namespace NewProject.Controllers
             await _roleRepo.UpdateRoleAsync(roleId, model);
             return Ok();
         }
+
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{roleId}")]
         public async Task<IActionResult> DeleteSport(int roleId)
         {

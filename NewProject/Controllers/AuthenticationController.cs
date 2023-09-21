@@ -48,7 +48,7 @@ namespace NewProject.Controllers
             if (roleID == null)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError,
-                    new Response { Status = "Error", Message = "This Role Doesn't Exist!" });
+                    new Response { Status = "Error", Message = "This RoleID Doesn't Exist!" });
             }
 
 
